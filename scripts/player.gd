@@ -5,12 +5,19 @@ extends CharacterBody3D
 @export var acc_speed : float
 @export var gravity : float
 
+@export_group("reference")
+@export var dialogue_system : Node
+
+@onready var interact_area : Area3D = $InteractArea
+
 var move := Vector3.ZERO
 var y_vel := 0.0
 
 
 func _process(delta: float) -> void:
 	move_player(delta)
+	
+	check_for_interaction()
 
 
 func move_player(delta: float) -> void:
@@ -33,3 +40,12 @@ func move_player(delta: float) -> void:
 	
 	# move player
 	move_and_slide()
+
+
+func check_for_interaction():
+	if not Input.is_action_just_pressed("interact"):
+		return
+	
+	var area = interact_area.get_overlapping_areas()[0]
+	
+	dialogue_system.trigger(area.get_parent().text)
