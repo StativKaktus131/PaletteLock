@@ -1,0 +1,22 @@
+﻿ID;KEY;TYPE;CONTENT;CONDITION
+0;MARIANNE;TEXT;Oh youve grown quite a bit;
+1;;YESNO;Isn't that so?;
+2;;TEXT;I knew I was right;YES
+3;;END;;
+4;;TEXT;I must have been wrong;NO
+5;;END;;
+6;JEFF;TEXT;What the fuzz;
+7;;TEXT;Where the huzz at?;
+8;;CHOICE;tell me[huzz,pluzz,gruzz];
+9;;GOTO;JEFF_HUZZ;1
+10;;TEXT;IT WAS AT PLUZZ?;2
+11;;END;;
+12;;TEXT;i didn't think it was at gruzz;3
+13;;END;;
+14;JEFF_HUZZ;TEXT;I forgot your name;
+15;;CHOICE;But what's your name?[GRINGO,MORTIMER,GIBBY];
+16;;TEXT;your name is gringo?;1
+17;;END;;
+18;;TEXT;I knew your mortimer?;2
+19;;END;;
+20;;TEXT;bitch ass gibby;3
