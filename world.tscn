@@ -1,6 +1,10 @@
-[gd_scene load_steps=10 format=4 uid="uid://d12k1ix13lrb"]
+[gd_scene load_steps=14 format=4 uid="uid://d12k1ix13lrb"]
 
 [ext_resource type="PackedScene" uid="uid://bs3iuosjw3f5n" path="res://scenes/player.tscn" id="1_f3sb7"]
+[ext_resource type="PackedScene" uid="uid://bjpqqfnsn811w" path="res://scenes/npc.tscn" id="2_aqk2v"]
+[ext_resource type="Texture2D" uid="uid://ble5uiuwxyn6q" path="res://art assets/NPC-A.png" id="3_aqk2v"]
+[ext_resource type="Texture2D" uid="uid://dawfa14esp87h" path="res://art assets/NPC-B.png" id="4_036b0"]
+[ext_resource type="Script" uid="uid://bmt56hfc842hv" path="res://dialogue_system.gd" id="5_036b0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f3sb7"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -66,7 +70,8 @@ environment = SubResource("Environment_tlwt5")
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Player" parent="." instance=ExtResource("1_f3sb7")]
+[node name="Player" parent="." node_paths=PackedStringArray("dialogue_system") instance=ExtResource("1_f3sb7")]
+dialogue_system = NodePath("../Canvas/Dialogue System")
 
 [node name="testmap" type="StaticBody3D" parent="."]
 
@@ -77,3 +82,58 @@ skeleton = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="testmap"]
 shape = SubResource("ConcavePolygonShape3D_tlwt5")
+
+[node name="NPC A" parent="." instance=ExtResource("2_aqk2v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.75859, 0, 0)
+tex = ExtResource("3_aqk2v")
+text = "MARIANNE"
+
+[node name="NPC B" parent="." instance=ExtResource("2_aqk2v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.84289, 2.30303, -11.7683)
+tex = ExtResource("4_036b0")
+text = "JEFF"
+
+[node name="Canvas" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dialogue System" type="Panel" parent="Canvas"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 135.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("5_036b0")
+interval = 0.02
+tween_speed = 20.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Canvas/Dialogue System"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Text" type="RichTextLabel" parent="Canvas/Dialogue System/MarginContainer"]
+layout_mode = 2
+
+[node name="Choice Container" type="VBoxContainer" parent="Canvas"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -256.0
+offset_bottom = 178.0
+grow_horizontal = 0

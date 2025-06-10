@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bs3iuosjw3f5n"]
+[gd_scene load_steps=5 format=3 uid="uid://bs3iuosjw3f5n"]
 
 [ext_resource type="Script" uid="uid://1vu0l5oaadbp" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://d3q4mcm26nwp" path="res://icon.svg" id="2_qhqgy"]
@@ -6,6 +6,9 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dqkch"]
 radius = 0.265006
 height = 1.24236
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_g2els"]
+radius = 1.13953
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_g2els")
@@ -24,3 +27,10 @@ texture = ExtResource("2_qhqgy")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.635135, 0)
 shape = SubResource("CapsuleShape3D_dqkch")
+
+[node name="InteractArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractArea"]
+shape = SubResource("SphereShape3D_g2els")
