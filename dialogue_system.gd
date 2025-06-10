@@ -8,14 +8,18 @@ extends Panel
 
 @onready var text_field : RichTextLabel = $MarginContainer/Text
 
+@onready var choice_container : VBoxContainer = $"../Choice Container"
+
 var timer : Timer
 var current_text : String = ""
-var current_dialouge_entry : DialogueEntry
+var current_dialogue_entry : DialogueEntry
 var current_char_pointer := 0
 var in_screen := false
 var json_data
 var dialouge_entries = []
 var current_choices = []
+
+signal on_dialogue_ended
 
 
 func _ready() -> void:
@@ -48,18 +52,18 @@ func _process(delta: float) -> void:
 	position = lerp(position, Vector2.DOWN * target_y, tween_speed * delta)
 	
 	
-	# pressed 'e' and dialogue panel is in screen
+	# set visibility of choice panel
+	choice_container.visible = current_choices.size() != 0
+	
+	# pressed 'e' and dialogue panel is in screen and not pressing choices
 	if Input.is_action_just_pressed("dialogue_accept") and \
-		abs(position.y - target_y) < 0.1:
+		abs(position.y - target_y) < 0.1 and current_choices.size() == 0:
+		step_through_dialogue()
 		
-		# advance dialogue entry
-		current_dialouge_entry = dialouge_entries[current_dialouge_entry.id + 1]
-		# update text
-		current_text = parse_content(current_dialouge_entry.content)
-		
-		current_char_pointer = 0
-		timer.start()
-		
+
+
+func step_through_dialogue() -> void:
+	set_dialog_at(current_dialogue_entry.id + 1)
 
 
 func trigger(key: String) -> void:
@@ -77,12 +81,9 @@ func trigger(key: String) -> void:
 		push_error("can't find dialogue entry at key \"" + key + "\"")
 		return
 	
-	current_dialouge_entry = dialouge_entries[start_idx]
-	current_text = current_dialouge_entry.content
-	
 	in_screen = true
-	current_char_pointer = 0
-	timer.start()
+	
+	set_dialog_at(start_idx)
 
 
 func load_json_dialogue() -> void:
@@ -96,15 +97,77 @@ func load_json_dialogue() -> void:
 		dialouge_entries.push_back(dialogue_entry)
 
 
-func parse_content(content: String) -> String:
-	# basically checking for choice
-	if not content.contains("["):
-		return content
+func parse_content(dialogue_entry: DialogueEntry) -> String:
+	var content = dialogue_entry.content
 	
-	# find choice string
-	var choices = content.substr(content.find("[")+1, content.find("]")-1)
-	# populate choice array
-	current_choices = choices.split(",")
+	if dialogue_entry.type == DialogueEntry.DialogueType.CHOICE:
+		# find choice string
+		var choices = content.substr(content.find('[')+1, content.find(']')-content.find('[') - 1)
+		# populate choice array
+		current_choices = choices.split(",")
 	
-	# return stripped content
-	return content.replace(content.substr(content.find("["), content.find("]")), "")
+		# return stripped content
+		return content.replace(content.substr(content.find("[")), "")
+	
+	elif dialogue_entry.type == DialogueEntry.DialogueType.YESNO:
+		current_choices = ["YES", "NO"]
+	
+	else:
+		current_choices = []
+	
+	return content
+
+
+func set_dialog_at(idx: int) -> void:
+	print("dialog at: " + str(idx))
+	# advance dialogue entry
+	current_dialogue_entry = dialouge_entries[idx]
+	# update text
+	current_text = parse_content(current_dialogue_entry)
+	
+	if current_dialogue_entry.type == DialogueEntry.DialogueType.END:
+		in_screen = false
+		on_dialogue_ended.emit()
+		return
+	elif current_dialogue_entry.type == DialogueEntry.DialogueType.GOTO:
+		trigger(current_dialogue_entry.content)
+		return
+	
+	if current_choices.size() != 0:
+		for choice in current_choices:
+			# add buttons
+			var btn = Button.new()
+			btn.text = choice
+			btn.pressed.connect(func(): option_pressed(choice))
+			choice_container.add_child(btn)
+	
+	current_char_pointer = 0
+	timer.start()
+
+
+func option_pressed(t: String) -> void:
+	var idx = current_dialogue_entry.id
+	
+	var search = \
+		DialogueEntry.DialogueCondition.YES if t == "YES" else \
+		DialogueEntry.DialogueCondition.NO if t == "NO" else \
+		DialogueEntry.DialogueCondition.ONE if t == current_choices[0] else \
+		DialogueEntry.DialogueCondition.TWO if t == current_choices[1] else \
+		DialogueEntry.DialogueCondition.THREE if t == current_choices[2] else \
+		null
+	
+	
+	for i in range(idx, dialouge_entries.size()):
+		var entry = dialouge_entries[i]
+		entry.print_entry()
+		if entry.condition == search:
+			print("entry condition: [" + str(entry.condition) + "]" + ", search: [" + str(search) + "]")
+			set_dialog_at(i)
+			current_choices = []
+			
+			# remove chillun
+			for child in choice_container.get_children():
+				choice_container.remove_child(child)
+			
+			return
+		pass

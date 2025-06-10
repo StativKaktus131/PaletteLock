@@ -17,6 +17,10 @@ var y_vel : float = 0.0
 var input_enabled : bool = true
 
 
+func _ready() -> void:
+	dialogue_system.on_dialogue_ended.connect(func(): input_enabled = true)
+
+
 func _process(delta: float) -> void:
 	move_player(delta)
 	check_for_interaction()
@@ -57,3 +61,4 @@ func check_for_interaction():
 	
 	input_enabled = false
 	dialogue_system.trigger(area.get_parent().text)
+	move = Vector3.ZERO

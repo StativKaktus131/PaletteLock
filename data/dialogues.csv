@@ -7,10 +7,16 @@
 5;;END;;
 6;JEFF;TEXT;What the fuzz;
 7;;TEXT;Where the huzz at?;
-8;;CHOICE;"tell me[huzz,pluzz,gruzz]";
-9;;TEXT;I knew it was at huzz;1
-10;;END;;
-11;;TEXT;IT WAS AT PLUZZ?;2
-12;;END;;
-13;;TEXT;i didn't think it was at gruzz;3
-14;;END;;
+8;;CHOICE;tell me[huzz,pluzz,gruzz];
+9;;GOTO;JEFF_HUZZ;1
+10;;TEXT;IT WAS AT PLUZZ?;2
+11;;END;;
+12;;TEXT;i didn't think it was at gruzz;3
+13;;END;;
+14;JEFF_HUZZ;TEXT;I forgot your name;
+15;;CHOICE;But what's your name?[GRINGO,MORTIMER,GIBBY];
+16;;TEXT;your name is gringo?;1
+17;;END;;
+18;;TEXT;I knew your mortimer?;2
+19;;END;;
+20;;TEXT;bitch ass gibby;3

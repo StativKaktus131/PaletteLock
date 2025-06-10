@@ -55,38 +55,74 @@
   },
   "9": {
     "KEY": "",
-    "TYPE": "TEXT",
-    "CONTENT": "I knew it was at huzz",
+    "TYPE": "GOTO",
+    "CONTENT": "JEFF_HUZZ",
     "CONDITION": 1
   },
   "10": {
-    "KEY": "",
-    "TYPE": "END",
-    "CONTENT": "",
-    "CONDITION": ""
-  },
-  "11": {
     "KEY": "",
     "TYPE": "TEXT",
     "CONTENT": "IT WAS AT PLUZZ?",
     "CONDITION": 2
   },
-  "12": {
+  "11": {
     "KEY": "",
     "TYPE": "END",
     "CONTENT": "",
     "CONDITION": ""
   },
-  "13": {
+  "12": {
     "KEY": "",
     "TYPE": "TEXT",
     "CONTENT": "i didn't think it was at gruzz",
     "CONDITION": 3
   },
-  "14": {
+  "13": {
     "KEY": "",
     "TYPE": "END",
     "CONTENT": "",
     "CONDITION": ""
+  },
+  "14": {
+    "KEY": "JEFF_HUZZ",
+    "TYPE": "TEXT",
+    "CONTENT": "I forgot your name",
+    "CONDITION": ""
+  },
+  "15": {
+    "KEY": "",
+    "TYPE": "CHOICE",
+    "CONTENT": "But what's your name?[GRINGO,MORTIMER,GIBBY]",
+    "CONDITION": ""
+  },
+  "16": {
+    "KEY": "",
+    "TYPE": "TEXT",
+    "CONTENT": "your name is gringo?",
+    "CONDITION": 1
+  },
+  "17": {
+    "KEY": "",
+    "TYPE": "END",
+    "CONTENT": "",
+    "CONDITION": ""
+  },
+  "18": {
+    "KEY": "",
+    "TYPE": "TEXT",
+    "CONTENT": "I knew your mortimer?",
+    "CONDITION": 2
+  },
+  "19": {
+    "KEY": "",
+    "TYPE": "END",
+    "CONTENT": "",
+    "CONDITION": ""
+  },
+  "20": {
+    "KEY": "",
+    "TYPE": "TEXT",
+    "CONTENT": "bitch ass gibby",
+    "CONDITION": 3
   }
 }
