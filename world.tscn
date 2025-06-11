@@ -4,25 +4,24 @@
 [ext_resource type="PackedScene" uid="uid://bjpqqfnsn811w" path="res://scenes/npc.tscn" id="2_aqk2v"]
 [ext_resource type="Texture2D" uid="uid://ble5uiuwxyn6q" path="res://art assets/NPC-A.png" id="3_aqk2v"]
 [ext_resource type="Texture2D" uid="uid://dawfa14esp87h" path="res://art assets/NPC-B.png" id="4_036b0"]
-[ext_resource type="Script" uid="uid://bmt56hfc842hv" path="res://dialogue_system.gd" id="5_036b0"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f3sb7"]
-sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
-ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
-
-[sub_resource type="Sky" id="Sky_fj7yv"]
-sky_material = SubResource("ProceduralSkyMaterial_f3sb7")
+[ext_resource type="Script" uid="uid://bmt56hfc842hv" path="res://scripts/dialogue_system.gd" id="5_036b0"]
+[ext_resource type="Texture2D" uid="uid://bcx4o8qahkagr" path="res://art assets/NPC-C.png" id="5_dwbse"]
+[ext_resource type="Shader" uid="uid://uai725th3s61" path="res://shaders/light.gdshader" id="7_pkg7o"]
 
 [sub_resource type="Environment" id="Environment_tlwt5"]
 background_mode = 2
-sky = SubResource("Sky_fj7yv")
+ambient_light_source = 2
+ambient_light_color = Color(0.45098, 0.27451, 0.298039, 1)
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fj7yv"]
-albedo_color = Color(0.995564, 0.243738, 1, 1)
-metallic_specular = 0.0
-roughness = 0.0
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pkg7o"]
+render_priority = 0
+shader = ExtResource("7_pkg7o")
+shader_parameter/shadow_color = Color(0.45098, 0.27451, 0.298039, 1)
+shader_parameter/light_color = Color(0.670588, 0.337255, 0.458824, 1)
+shader_parameter/light_direction = Vector3(-0.5, -1, -0.5)
+shader_parameter/light_max = 2.275
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q3k52"]
 
@@ -61,14 +60,18 @@ data = PackedVector3Array(10, 0, -5.3482, 10, 2.1317, -13.2088, 10, 0, -13.2088,
 
 [node name="World" type="Node"]
 
+[node name="Lights" type="Node" parent="."]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.01477, 0.419481, 7.10211)
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6058, 1, 7.43141)
+
 [node name="World Env" type="Node" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="World Env"]
 environment = SubResource("Environment_tlwt5")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="World Env"]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
-shadow_enabled = true
 
 [node name="Player" parent="." node_paths=PackedStringArray("dialogue_system") instance=ExtResource("1_f3sb7")]
 dialogue_system = NodePath("../Canvas/Dialogue System")
@@ -76,7 +79,7 @@ dialogue_system = NodePath("../Canvas/Dialogue System")
 [node name="testmap" type="StaticBody3D" parent="."]
 
 [node name="Plane" type="MeshInstance3D" parent="testmap"]
-material_override = SubResource("StandardMaterial3D_fj7yv")
+material_override = SubResource("ShaderMaterial_pkg7o")
 mesh = SubResource("ArrayMesh_y8fy3")
 skeleton = NodePath("")
 
@@ -86,23 +89,21 @@ shape = SubResource("ConcavePolygonShape3D_tlwt5")
 [node name="NPC A" parent="." instance=ExtResource("2_aqk2v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.75859, 0, 0)
 tex = ExtResource("3_aqk2v")
-text = "MARIANNE"
+text = "GERTRUD_ENTRY"
 
 [node name="NPC B" parent="." instance=ExtResource("2_aqk2v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.84289, 2.30303, -11.7683)
 tex = ExtResource("4_036b0")
-text = "JEFF"
+text = "JET_ENTRY"
 
-[node name="Canvas" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="NPC C" parent="." instance=ExtResource("2_aqk2v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.05424, 2.30303, -11.7683)
+tex = ExtResource("5_dwbse")
+text = "AHMED_ENTRY"
+
+[node name="Canvas" type="CanvasLayer" parent="."]
 
 [node name="Dialogue System" type="Panel" parent="Canvas"]
-layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -113,6 +114,17 @@ grow_vertical = 0
 script = ExtResource("5_036b0")
 interval = 0.02
 tween_speed = 20.0
+
+[node name="Choice Container" type="VBoxContainer" parent="Canvas/Dialogue System"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -256.0
+offset_top = -182.0
+offset_bottom = -4.0
+grow_horizontal = 0
+alignment = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Canvas/Dialogue System"]
 layout_mode = 1
@@ -128,12 +140,3 @@ theme_override_constants/margin_bottom = 5
 
 [node name="Text" type="RichTextLabel" parent="Canvas/Dialogue System/MarginContainer"]
 layout_mode = 2
-
-[node name="Choice Container" type="VBoxContainer" parent="Canvas"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -256.0
-offset_bottom = 178.0
-grow_horizontal = 0

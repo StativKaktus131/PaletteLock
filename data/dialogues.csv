@@ -1,22 +1,27 @@
 ﻿ID;KEY;TYPE;CONTENT;CONDITION
-0;MARIANNE;TEXT;Oh youve grown quite a bit;
-1;;YESNO;Isn't that so?;
-2;;TEXT;I knew I was right;YES
-3;;END;;
-4;;TEXT;I must have been wrong;NO
-5;;END;;
-6;JEFF;TEXT;What the fuzz;
-7;;TEXT;Where the huzz at?;
-8;;CHOICE;tell me[huzz,pluzz,gruzz];
-9;;GOTO;JEFF_HUZZ;1
-10;;TEXT;IT WAS AT PLUZZ?;2
-11;;END;;
-12;;TEXT;i didn't think it was at gruzz;3
-13;;END;;
-14;JEFF_HUZZ;TEXT;I forgot your name;
-15;;CHOICE;But what's your name?[GRINGO,MORTIMER,GIBBY];
-16;;TEXT;your name is gringo?;1
-17;;END;;
-18;;TEXT;I knew your mortimer?;2
-19;;END;;
-20;;TEXT;bitch ass gibby;3
+0;GERTRUD_ENTRY;TEXT;Hi, I'm Gertrud.;
+1;;YESNO;Have you seen <VICTIM>?;
+2;;TEXT;I haven't seen him in a few days either.;NO
+3;;TEXT;Ever since I became a professional knife seller he's been acting weirdly.;
+4;;GOTO;GERTRUD_C1;
+5;;TEXT;That's odd.. No one has seen him in days.;YES
+6;;TEXT;But I guess I haven't been home much since I took that job as a butcher.;
+7;;GOTO;GERTRUD_C1;
+8;GERTRUD_C1;TEXT;Anyway he never really approved of my job as a janitor.;
+9;;TEXT;If I were you I'd talk to his landlord, he's pretty involved with us.;
+10;;END;;
+11;JET_ENTRY;TEXT;I think I'm gonna need to buy some new garden shears.;
+12;;TEXT;These bushes aren't gonna trim themselves!;
+13;;TEXT;Maybe I should use the money from selling one shoe for them.;
+14;;END;;
+15;AHMED_ENTRY;TEXT;Have you seen <VICTIM>? He's not been paying rent for two days;
+16;;CHOICE;Have you talked to Jet or Gertrud?[JET,GERTRUD,BOTH];
+17;;TEXT;You should go talk to Gertrud.;1
+18;;END;;
+19;;TEXT;You should go talk to Jet.;2
+20;;END;;
+21;;TEXT;Good Girl.;3
+22;;TEXT;Look I bet it's one of us three.;
+23;;TEXT;If you wan't, I stole a kids detective set once, it should be inside.;
+24;;TEXT;Just don't go in the basement.;
+25;;END;;

@@ -7,8 +7,7 @@ extends Panel
 @export var tween_speed : float
 
 @onready var text_field : RichTextLabel = $MarginContainer/Text
-
-@onready var choice_container : VBoxContainer = $"../Choice Container"
+@onready var choice_container : VBoxContainer = $"Choice Container"
 
 var timer : Timer
 var current_text : String = ""
@@ -119,7 +118,6 @@ func parse_content(dialogue_entry: DialogueEntry) -> String:
 
 
 func set_dialog_at(idx: int) -> void:
-	print("dialog at: " + str(idx))
 	# advance dialogue entry
 	current_dialogue_entry = dialouge_entries[idx]
 	# update text
@@ -159,9 +157,7 @@ func option_pressed(t: String) -> void:
 	
 	for i in range(idx, dialouge_entries.size()):
 		var entry = dialouge_entries[i]
-		entry.print_entry()
 		if entry.condition == search:
-			print("entry condition: [" + str(entry.condition) + "]" + ", search: [" + str(search) + "]")
 			set_dialog_at(i)
 			current_choices = []
 			
